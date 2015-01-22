@@ -29,12 +29,10 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 	public CoolWeatherOpenHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
 		db.execSQL(CREATE_PROVINCE); // 创建Province表
 		db.execSQL(CREATE_CITY); // 创建City表
 		db.execSQL(CREATE_COUNTY); // 创建County表
@@ -42,7 +40,6 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 
 	}
 
