@@ -12,7 +12,6 @@ public class HttpUtil {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				HttpURLConnection connection = null;
 				try {
 					URL url = new URL(address);

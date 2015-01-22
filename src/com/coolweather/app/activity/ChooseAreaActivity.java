@@ -115,7 +115,6 @@ public class ChooseAreaActivity extends Activity {
 	 * 查询全国所有的省，优先从数据库查询，如果没有查询到再去服务器上查询。
 	 */
 	private void queryProvinces() {
-		// TODO Auto-generated method stub
 		provinceList = coolWeatherDB.loadProvinces();
 		if (provinceList.size() > 0) {
 			dataList.clear();
@@ -186,7 +185,6 @@ public class ChooseAreaActivity extends Activity {
 
 			@Override
 			public void onFinish(String response) {
-				// TODO Auto-generated method stub
 				boolean result = false;
 				if ("province".equals(type)) {
 					result = Utility.handleProvincesResponse(coolWeatherDB,
