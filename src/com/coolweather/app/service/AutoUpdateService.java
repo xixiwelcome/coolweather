@@ -31,11 +31,13 @@ public class AutoUpdateService extends Service {
 			}
 		}).start();
 		AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		int anHour = 8 * 60 * 60 * 1000; // 这是8小时的毫秒数
-		long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
-		Intent i = new Intent(this, AutoUpdateReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
-		manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+		int anHour = intent.getIntExtra("freq_refresh", -1) * 60 * 60 * 1000; // 这是小时的毫秒数
+		if (anHour > 0) {
+			long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
+			Intent i = new Intent(this, AutoUpdateReceiver.class);
+			PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+			manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 
