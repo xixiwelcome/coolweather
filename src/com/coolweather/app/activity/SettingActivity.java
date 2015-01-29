@@ -52,7 +52,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 					Toast.makeText(SettingActivity.this, R.string.freq_illegal,
 							Toast.LENGTH_SHORT).show();
 				}
-				freq_refresh_edit.setSelection(s.length());
+				freq_refresh_edit.setSelection(freq_refresh_edit.getText().length());
 			}
 		}
 	};
@@ -71,12 +71,15 @@ public class SettingActivity extends Activity implements OnClickListener {
 		int int_cur_freq = preference.getInt("freq_refresh", -1);
 		boolean is_auto_refresh = preference.getBoolean("is_auto_refresh",
 				false);
-		if (int_cur_freq < 0 || is_auto_refresh == false) {
+		if (int_cur_freq < 0) {
 			is_refresh_checkbox.setChecked(false);
-			freq_refresh_edit.setEnabled(false);
+			freq_refresh_edit.setText("");
 		} else {
 			is_refresh_checkbox.setChecked(is_auto_refresh);
-			freq_refresh_edit.setText(int_cur_freq);
+			freq_refresh_edit.setText(int_cur_freq+"");
+		}
+		if (is_auto_refresh == false) {
+			freq_refresh_edit.setEnabled(false);
 		}
 		is_refresh_checkbox.setOnClickListener(this);
 		ok.setOnClickListener(this);
@@ -102,6 +105,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 					Toast.makeText(SettingActivity.this,
 							R.string.freq_empty_allert, Toast.LENGTH_SHORT)
 							.show();
+					return;
 				}
 				intent.putExtra("freq_refresh",
 						Integer.parseInt(str_freq));
@@ -113,6 +117,9 @@ public class SettingActivity extends Activity implements OnClickListener {
 					.getDefaultSharedPreferences(this).edit();
 			editor.putBoolean("is_auto_refresh",
 					is_refresh_checkbox.isChecked());
+			if (str_freq.equals("")) {
+				str_freq = "-1";
+			}
 			editor.putInt("freq_refresh", Integer.parseInt(str_freq));
 			editor.commit();
 			finish();

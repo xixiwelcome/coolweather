@@ -14,6 +14,7 @@ import android.text.TextUtils;
 
 import com.coolweather.app.db.CoolWeatherDB;
 import com.coolweather.app.model.City;
+import com.coolweather.app.model.CityWeather;
 import com.coolweather.app.model.County;
 import com.coolweather.app.model.Province;
 
@@ -89,7 +90,8 @@ public class Utility {
 	/**
 	 * 解析服务器返回的JSON数据，并将解析出的数据存储到本地。
 	 */
-	public static void handleWeatherResponse(Context context, String response) {
+	public static int handleWeatherResponse(CoolWeatherDB coolWeatherDB, 
+			String response, boolean isAdd, boolean isRefresh) {
 		try {
 			JSONObject jsonObject = new JSONObject(response);
 			JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
@@ -99,17 +101,19 @@ public class Utility {
 			String temp2 = weatherInfo.getString("temp2");
 			String weatherDesp = weatherInfo.getString("weather");
 			String publishTime = weatherInfo.getString("ptime");
-			saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
-					weatherDesp, publishTime);
+			CityWeather cityWeather = new CityWeather(cityName, temp1, temp2, weatherDesp, 
+					weatherCode, publishTime);			
+			return coolWeatherDB.saveCityWeather(cityWeather, isAdd, isRefresh);
 		} catch (JSONException e) {
 			e.printStackTrace();
+			return CoolWeatherDB.NO_WEATHER_DATA;
 		}
 	}
 
 	/**
 	 * 将服务器返回的所有天气信息存储到SharedPreferences文件中。
 	 */
-	public static void saveWeatherInfo(Context context, String cityName,
+/*	public static void saveWeatherInfo(Context context, String cityName,
 			String weatherCode, String temp1, String temp2, String weatherDesp,
 			String publishTime) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
@@ -124,6 +128,6 @@ public class Utility {
 		editor.putString("publish_time", publishTime);
 		editor.putString("current_date", sdf.format(new Date()));
 		editor.commit();
-	}
+	}*/
 
 }

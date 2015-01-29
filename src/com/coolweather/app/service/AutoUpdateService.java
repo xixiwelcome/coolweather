@@ -1,5 +1,8 @@
 package com.coolweather.app.service;
 
+import com.coolweather.app.activity.WeatherActivity;
+import com.coolweather.app.db.CoolWeatherDB;
+import com.coolweather.app.model.CityWeather;
 import com.coolweather.app.receiver.AutoUpdateReceiver;
 import com.coolweather.app.util.HttpCallbackListener;
 import com.coolweather.app.util.HttpUtil;
@@ -13,8 +16,11 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 public class AutoUpdateService extends Service {
+
+	CoolWeatherDB coolWeatherDB;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -45,21 +51,34 @@ public class AutoUpdateService extends Service {
 	 * 更新天气信息。
 	 */
 	private void updateWeather() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		String weatherCode = prefs.getString("weather_code", "");
-		String address = "http://www.weather.com.cn/data/cityinfo/"
-				+ weatherCode + ".html";
-		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
-			@Override
-			public void onFinish(String response) {
-				Utility.handleWeatherResponse(AutoUpdateService.this, response);
+		coolWeatherDB = CoolWeatherDB.getInstance(this);
+		String weatherCode = coolWeatherDB.loadMainCityWeather()
+				.getWeather_code();
+		if (!TextUtils.isEmpty(weatherCode)) {
+			String address = "http://www.weather.com.cn/data/cityinfo/"
+					+ weatherCode + ".html";
+			HttpUtil.sendHttpRequest(address, new RefreshListener());
+		}
+		for (CityWeather cy : coolWeatherDB.loadMinorCityWeather()) {
+			weatherCode = cy.getWeather_code();
+			if (!TextUtils.isEmpty(weatherCode)) {
+				String address = "http://www.weather.com.cn/data/cityinfo/"
+						+ weatherCode + ".html";
+				HttpUtil.sendHttpRequest(address, new RefreshListener());
 			}
+		}
 
-			@Override
-			public void onError(Exception e) {
-				e.printStackTrace();
-			}
-		});
 	}
+
+	class RefreshListener implements HttpCallbackListener {
+		@Override
+		public void onFinish(String response) {
+			Utility.handleWeatherResponse(coolWeatherDB, response, false, true);
+		}
+
+		@Override
+		public void onError(Exception e) {
+			e.printStackTrace();
+		}
+	};
 }

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.util.Log;
+
 public class HttpUtil {
 	public static void sendHttpRequest(final String address, final HttpCallbackListener listener) {
 		new Thread(new Runnable() {

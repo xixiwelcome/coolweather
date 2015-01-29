@@ -24,7 +24,7 @@
             android:layout_centerInParent="true"
             android:textColor="#fff"
             android:textSize="24sp" />
-        
+
         <Button
             android:id="@+id/setting"
             android:layout_width="30dp"
@@ -33,21 +33,21 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/setting" />
-             
+
         <Button
             android:id="@+id/refresh_weather"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_toLeftOf="@id/setting"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/setting"
             android:background="@drawable/refresh" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:background="#27A5F9" >
 
         <TextView
@@ -118,5 +118,37 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"        
+        android:background="#A9D0F5"
+        android:baselineAligned="false" >
+        
+        <ListView 
+            android:id="@+id/city_weather_list"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" >         
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/add_city"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#0080FF" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="#FFF"
+                android:textSize="40sp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
